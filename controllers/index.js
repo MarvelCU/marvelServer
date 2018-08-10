@@ -15,13 +15,13 @@ module.exports = {
         })
             .then((user) => {
                 res.status(201).json({
-                    msg: 'data inserted',
+                    msg: 'Data inserted',
                     user
                 })
             })
             .catch((err) => {
                 res.status(500).json({
-                    msg: 'insert failed',
+                    msg: 'Data insert failed',
                     msg: err.message
                 })
             });
@@ -31,13 +31,13 @@ module.exports = {
         User.find({})
             .then((users) => {
                 res.status(200).json({
-                    msg: 'data found',
+                    msg: 'Data found',
                     users
                 })
             })
             .catch((err) => {
                 res.status(500).json({
-                    msg: 'data not found',
+                    msg: 'Data not found',
 
                 })
             });
@@ -48,7 +48,7 @@ module.exports = {
             .then((user) => {
                 if (user === null) {
                     res.status(401).json({
-                        msg: 'username/password wrong',
+                        msg: 'Username/Password incorrect',
                         user
                     })
                 } else {
@@ -64,12 +64,12 @@ module.exports = {
 
                         console.log(token);
                         res.status(201).json({
-                            msg: 'login succes',
+                            msg: 'Login success',
                             token
                         })
                     } else {
                         res.status(401).json({
-                            msg: 'username/password wrong',
+                            msg: 'Username/Password incorrect',
                             data
                         })
                     }
