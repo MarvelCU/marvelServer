@@ -85,33 +85,28 @@ module.exports = {
         let url_user_info = `https://graph.facebook.com/me?fields=id,name,email&access_token=${fb.fb.accessToken}`
         axios.get(url_user_info)
             .then((result) => {
-                User.findOne({ email: result.data.email })
-                    .then((user) => {
-                        if (user === null) {
-                            User.create(result.data)
-                                .then((newUser) => {
-                                    let token = jwt.sign(newUser, 'secret-key')
-                                    res.status(200).json(token)
-                                })
-                                .catch((err) => {
-                                    res.status(500).json(err)
-                                });
-                        } else {
-                            var token = jwt.sign({
-                                id: user.id,
-                                name: user.name,
-                                email: user.email
-                            }, 'secret-key')
-
-                            res.status(201).json({
-                                msg: 'login succes',
-                                token
-                            })
-                        }
-                    })
-                    .catch((err) => {
-                        res.status(500).json(err)
-                    });
+               User.find({ email: result.data.email })
+               .then((user) => {
+                   if(user.length === 0){
+                       User.create(result.data)
+                       .then(userData => {
+                           let token = jwt.sign(userData, 'marvel')
+                           res.status(200).json(token)
+                       })
+                       .catch(err => {
+                           res.status(500).json(err)
+                       })
+                   } else {
+                       
+                    let token = jwt.sign({id: user[0]._id, name: user[0].name, email: user[0].email}, 'marvel')
+                    res.status(200).json(token)
+                   }
+                   
+               })
+               .catch((err) => {
+                   res.status(500).json(err)
+               });
+               
             })
             .catch((err) => {
                 res.status(500).json(err)
@@ -119,5 +114,14 @@ module.exports = {
 
     },
 
+    wiki: (req,res) => {
+        axios.get(`https://en.wikipedia.org/w/api.php?action=opensearch&search=${req.query.name}&limit=100&format=json`)
+        .then(result => {
+            res.status(200).json(result.data)
+        })
+        .catch(err => {
+            res.status(500).json(err)
+        })
+    }
 
 };
