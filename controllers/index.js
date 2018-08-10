@@ -115,7 +115,7 @@ module.exports = {
     },
 
     wiki: (req,res) => {
-        axios.get(`https://en.wikipedia.org/w/api.php?action=opensearch&search=${req.query.name}&limit=100&format=json`)
+        axios.get(`https://en.wikipedia.org/w/api.php?action=opensearch&search=${req.query.name}&limit=5&format=json`)
         .then(result => {
             res.status(200).json(result.data)
         })
